@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Laboratorium 5</string>
+
+    <string name="action_http">HttpsUrlConnection</string>
+    <string name="action_retrofit">RetroFit</string>
+    <string name="action_webkit">WebView</string>
+
+    <string name="id">ID:</string>
+    <string name="title">Tytuł:</string>
+
+    <string name="title_activity_webview">Webview Demo</string>
+    <string name="title_activity_retrofit">Retrofit Demo</string>
+
+    <string name="postTitle">Tytuł wpisu</string>
+    <string name="postBody">Treść wpisu</string>
+    <string name="postUserId">ID użytkownika</string>
+</resources>
