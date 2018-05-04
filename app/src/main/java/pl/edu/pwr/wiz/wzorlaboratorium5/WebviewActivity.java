@@ -34,12 +34,16 @@ public class WebviewActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 /* Jeśli nie przechwycimy przekierowania to spowodouje ono otwarcie
                    nowego okna z przeglądarką, czego chcemy uniknąć */
-                view.loadUrl(request.getUrl().getQuery());
+                Log.d(TAG, request.getUrl().toString());
+                view.loadUrl(request.getUrl().toString());
+
                 return true;
             }
         });
+        webview.getSettings().setAllowFileAccess(true);
+        webview.getSettings().setDomStorageEnabled(true);
 
-        /* Ladujemy stronę Onet.pl */
+        /* Ladujemy stronę */
         webview.loadUrl(url);
     }
 
