@@ -1,6 +1,7 @@
 package pl.edu.pwr.wiz.wzorlaboratorium5;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,13 +20,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 import com.google.gson.Gson;
-
 import javax.net.ssl.HttpsURLConnection;
-
-import de.greenrobot.event.EventBus;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private static final String POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,29 +62,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        EventBus.getDefault().unregister(this);
-        super.onPause();
-    }
-
-    /* Obsluga powrotu z wątku z danymi */
-    public void onEventMainThread(PostLoadedEvent event) {
-        ListView listView = (ListView) findViewById(R.id.posts_list);
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressbar);
-
-        listView.setAdapter(new PostsAdapter(getApplicationContext(), event.getPosts()));
-
-        progressBar.setVisibility(View.INVISIBLE);
-        listView.setVisibility(View.VISIBLE);
-    }
-
     /* Funkcja pobiera dane z API */
     private boolean fetchData() {
         /* Ustawiamy widoczność progress baru i chowamy listę */
@@ -95,19 +72,21 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         /* Uruchamiamy wątek do ładowania danych przy pomocy HttpsUrlConnection */
-        new LoadThread().start();
+        new LoadDataTask().execute(POSTS_URL);
 
         return true;
     }
 
-    /* Wątek do pobierania danych w tle */
-    class LoadThread extends Thread {
-        static final String POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
+    /* AsyncTask do pobierania danych w tle */
+    private class LoadDataTask extends AsyncTask<String, Void, PostLoadedData> {
+        /* Wątek wykonywany w tle */
         @Override
-        public void run() {
+        protected PostLoadedData doInBackground(String... urls) {
+            if(urls.length != 1) return null;   // Sprawdzamy czy przekazano dokładnie jeden URL
+
             try {
                 HttpsURLConnection c =
-                        (HttpsURLConnection ) new URL(POSTS_URL).openConnection();
+                        (HttpsURLConnection ) new URL(urls[0]).openConnection();
                 try {
                     InputStream in = c.getInputStream();
                     BufferedReader reader =
@@ -116,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
                             new Gson().fromJson(reader, Post[].class);
                     reader.close();
 
-                    /* Wywołujemy event */
-                    EventBus.getDefault().post(new PostLoadedEvent(posts));
+                    return new PostLoadedData(posts);
 
                 } catch (IOException e) {
                     Log.e(getClass().getSimpleName(), "Błąd parsowania formatu JSON", e);
@@ -128,6 +106,21 @@ public class MainActivity extends AppCompatActivity {
             catch (Exception e) {
                 Log.e(getClass().getSimpleName(), "Błąd parsowania formatu JSON", e);
             }
+
+            return null;
+        }
+
+        /* Obsluga powrotu z wątku z danymi */
+        @Override
+        protected void onPostExecute(PostLoadedData postLoadedData) {
+            ListView listView = (ListView) findViewById(R.id.posts_list);
+            ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressbar);
+
+            if(postLoadedData != null) listView.setAdapter(new PostsAdapter(getApplicationContext(), postLoadedData.getPosts()));
+             else Toast.makeText(MainActivity.this, R.string.download_error, Toast.LENGTH_LONG).show();
+
+            progressBar.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.VISIBLE);
         }
     }
 }
