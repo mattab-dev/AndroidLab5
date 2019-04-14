@@ -205,7 +205,7 @@ public class RetrofitActivity extends AppCompatActivity {
                 Post editablePost = response.body().get(0);
                 postTitleInput.setText(editablePost.title);
                 postBodyInput.setText(editablePost.body);
-                //   postUserIdInput.setText(editablePost.userId);
+                postUserIdInput.setText(editablePost.userId.toString());
 
             }
 
