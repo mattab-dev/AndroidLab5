@@ -30,6 +30,9 @@
             android:name=".RetrofitActivity"
             android:label="@string/title_activity_retrofit"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".CommentActivity"
+            android:label="@string/commentDemo"
+            android:parentActivityName=".RetrofitActivity" />
     </application>
 
 </manifest>

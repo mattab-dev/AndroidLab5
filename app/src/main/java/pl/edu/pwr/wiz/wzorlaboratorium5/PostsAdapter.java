@@ -35,6 +35,6 @@ class PostsAdapter extends ArrayAdapter<Post> {
         TextView title = (TextView) row.findViewById(R.id.title);
         title.setText(getItem(position).title);
 
-        return(row);
+        return (row);
     }
 }

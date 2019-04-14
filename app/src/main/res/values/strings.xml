@@ -16,4 +16,16 @@
     <string name="postUserId">ID użytkownika</string>
 
     <string name="download_error">Błąd pobierania danych</string>
+    <string name="name">Name:</string>
+    <string name="email">Email:</string>
+    <string name="comment">Comment:</string>
+    <string name="commentId">Id komentarza:</string>
+    <string name="commentName">Tytuł komentarza:</string>
+    <string name="commentInsertBody">Treść komentarza:</string>
+    <string name="commentDemo">Comment Demo</string>
+    <string name="postid">PostId:</string>
+    <string name="menuFilters">Filters</string>
+    <string name="searchForUser">Szukaj postów użytkownika</string>
+    <string name="searchForPostId">Szukaj postu</string>
+    <string name="filter_id_hint">Wpisz id</string>Szukaj posta/string>
 </resources>

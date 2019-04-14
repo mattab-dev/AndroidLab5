@@ -1,18 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="pl.edu.pwr.wiz.wzorlaboratorium5.MainActivity">
+    tools:context="pl.edu.pwr.wiz.wzorlaboratorium5.RetrofitActivity">
 
     <item
-        android:id="@+id/action_retrofit"
+        android:id="@+id/userFilter"
         android:orderInCategory="100"
-        android:title="@string/action_retrofit"
+        android:title="@string/searchForUser"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_webkit"
+        android:id="@+id/postIdFilter"
         android:orderInCategory="100"
-        android:title="@string/action_webkit"
+        android:title="@string/searchForPostId"
         app:showAsAction="never" />
 
 </menu>

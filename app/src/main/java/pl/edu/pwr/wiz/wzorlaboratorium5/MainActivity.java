@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     /* AsyncTask do pobierania danych w tle */
     private class LoadDataTask extends AsyncTask<String, Void, PostLoadedData> {
         /* Wątek wykonywany w tle */
