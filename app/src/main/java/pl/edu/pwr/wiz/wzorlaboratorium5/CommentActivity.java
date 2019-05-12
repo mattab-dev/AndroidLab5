@@ -73,6 +73,7 @@ public class CommentActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.INVISIBLE);
                 listView.setVisibility(View.VISIBLE);
             }
+
             @Override
             public void onFailure(Call<List<Comment>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Wystąpił problem z połączeniem", Toast.LENGTH_SHORT).show();
@@ -82,44 +83,38 @@ public class CommentActivity extends AppCompatActivity {
         return true;
     }
 
-    /* Funkcja generuje pole dialogowe do dodania posta */
     private void addComment() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Dodawanie komentarza");
 
         View viewInflated = LayoutInflater.from(this).inflate(R.layout.comment_add, null);
 
-        // Zapamietujemy nasze pola
-        final EditText commentIdInput = (EditText) viewInflated.findViewById(R.id.commentId);
         final EditText commentNameInput = (EditText) viewInflated.findViewById(R.id.commentName);
         final EditText commentEmailInput = (EditText) viewInflated.findViewById(R.id.commentEmail);
         final EditText commentBodyInput = viewInflated.findViewById(R.id.commentInsertBody);
 
-        // Ustawiamy widok do buildera
         builder.setView(viewInflated);
 
-        // Callback'i dla przycisków
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
 
-                Integer commentId = Integer.parseInt(commentIdInput.getText().toString());
                 String name = commentNameInput.getText().toString();
                 String email = commentEmailInput.getText().toString();
                 String body = commentBodyInput.getText().toString();
 
-                Log.v(TAG, "CommentId: " + commentId.toString());
                 Log.v(TAG, "Name: " + name);
                 Log.v(TAG, "Email: " + email);
                 Log.v(TAG, "Body: " + body);
 
-                Call<Post> call = jsonService.addComment(commentId, name, email, body);
+                Call<Post> call = jsonService.addComment(name, email, body);
                 call.enqueue(new Callback<Post>() {
                     @Override
                     public void onResponse(Call<Post> call, Response<Post> response) {
                         Toast.makeText(getApplicationContext(), "Dane zapisane pod ID: " + response.body().id.toString(), Toast.LENGTH_LONG).show();
                     }
+
                     @Override
                     public void onFailure(Call<Post> call, Throwable t) {
                         Log.v(TAG, t.toString());

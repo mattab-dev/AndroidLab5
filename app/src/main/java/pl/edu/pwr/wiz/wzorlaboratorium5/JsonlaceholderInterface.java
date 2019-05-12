@@ -35,7 +35,7 @@ public interface JsonlaceholderInterface {
 
     @FormUrlEncoded
     @POST("comments")
-    Call<Post> addComment(@Field("id") Integer commentId, @Field("name") String commentName,
+    Call<Post> addComment(@Field("name") String commentName,
                           @Field("email") String email, @Field("body") String body);
 
     @FormUrlEncoded

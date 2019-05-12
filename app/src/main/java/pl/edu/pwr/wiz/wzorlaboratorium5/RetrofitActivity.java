@@ -105,7 +105,8 @@ public class RetrofitActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent();
-                        intent.putExtra("postId", position + 1);
+                        Post clickedPost = (Post) parent.getItemAtPosition(position);
+                        intent.putExtra("postId", clickedPost.id);
                         intent.setClass(getApplicationContext(), CommentActivity.class);
                         startActivity(intent);
                     }
@@ -114,7 +115,8 @@ public class RetrofitActivity extends AppCompatActivity {
                 listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                        editPost(id + 1);
+                        Post clickedPost = (Post) parent.getItemAtPosition(position);
+                        editPost(clickedPost.id); // fix needed
                         return true;
                     }
                 });
@@ -186,7 +188,7 @@ public class RetrofitActivity extends AppCompatActivity {
         dialogBuilder.show();
     }
 
-    private void editPost(final Long id) {
+    private void editPost(final Integer id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Edycja posta");
 
@@ -198,7 +200,7 @@ public class RetrofitActivity extends AppCompatActivity {
 
         builder.setView(viewInflated);
 
-        Call<List<Post>> call = jsonService.getPostById(id.intValue());
+        Call<List<Post>> call = jsonService.getPostById(id);
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
@@ -232,7 +234,7 @@ public class RetrofitActivity extends AppCompatActivity {
                 call.enqueue(new Callback<Post>() {
                     @Override
                     public void onResponse(Call<Post> call, Response<Post> response) {
-                        Toast.makeText(getApplicationContext(), "Dane uaktualnione pod ID: " + id.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Dane uaktualnione pod ID: " + response.body().id, Toast.LENGTH_LONG).show();
                     }
 
                     @Override

@@ -30,9 +30,6 @@ public class CommentsAdapter extends ArrayAdapter<Comment> {
         LayoutInflater inflater = (LayoutInflater) mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.comment_info, parent, false);
 
-        TextView postId = row.findViewById(R.id.comment_post_id);
-        postId.setText(Integer.toString(getItem(position).postId));
-
         TextView id = (TextView) row.findViewById(R.id.id);
         id.setText(Integer.toString(getItem(position).id));
 
